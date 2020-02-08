@@ -45,11 +45,11 @@ func (hf *Hostfile) List() ([]Entry, error) {
 	if err != nil {
 		return nil, err
 	}
-	return list(hfString)
+	return list(hfString), nil
 }
 
-func list(hfString string) ([]Entry, error) {
-	return unmarshalHostfile(hfString), nil
+func list(hf string) []Entry {
+	return unmarshalHostfile(hf)
 }
 
 // Get retrieves all items where the IP AND Hostname matches
