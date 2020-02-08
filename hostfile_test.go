@@ -2,6 +2,7 @@ package hostfile
 
 import (
 	"fmt"
+	"os"
 	"strings"
 	"testing"
 )
@@ -26,9 +27,8 @@ func TestUnmarshalHostfile(t *testing.T) {
 			t.Fail()
 		}
 	}
-
 }
-func hfDisplay(t *testing.T, hf []HostfileEntry) string {
+func hfDisplay(t *testing.T, hf []Entry) string {
 	t.Helper()
 	var entries []string
 	for i, v := range hf {
@@ -42,7 +42,7 @@ func hfDisplay(t *testing.T, hf []HostfileEntry) string {
 	)
 }
 
-func fakeHostfileString(t *testing.T) (example string, expected []HostfileEntry) {
+func fakeHostfileString(t *testing.T) (example string, expected []Entry) {
 	t.Helper()
 	return `# Copyright (c) 1993-2009 Microsoft Corp.
 	#
@@ -67,10 +67,10 @@ func fakeHostfileString(t *testing.T) (example string, expected []HostfileEntry)
 		127.0.0.1       localhost
 	#	::1             localhost
 		127.0.0.2       localhost2
-	`, []HostfileEntry{
-			HostfileEntry{IPAddress: "127.0.0.4", Hostname: "localhost4"},
-			HostfileEntry{IPAddress: "127.0.0.3", Hostname: "localhost3"},
-			HostfileEntry{IPAddress: "127.0.0.1", Hostname: "localhost"},
-			HostfileEntry{IPAddress: "127.0.0.2", Hostname: "localhost2"},
+	`, []Entry{
+			Entry{IPAddress: "127.0.0.4", Hostname: "localhost4"},
+			Entry{IPAddress: "127.0.0.3", Hostname: "localhost3"},
+			Entry{IPAddress: "127.0.0.1", Hostname: "localhost"},
+			Entry{IPAddress: "127.0.0.2", Hostname: "localhost2"},
 		}
 }
