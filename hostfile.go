@@ -24,7 +24,7 @@ func Open(filepath ...string) (Hostfile, error) {
 		return Hostfile{}, fmt.Errorf("too many strings entered as filepath parameter. Please enter 0 or 1 strings")
 	}
 	hf := Hostfile{Path: fp}
-	return hf, hf.TestPath()
+	return hf, hf.IsValidPath()
 
 }
 
@@ -107,9 +107,9 @@ func (hf *Hostfile) RemoveByHostname(entry Entry) error {
 	return nil
 }
 
-// TestPath tests the hostfile for common issues, such as file not existing,
+// IsValidPath tests the hostfile for common issues, such as file not existing,
 // and file being a directory
-func (hf *Hostfile) TestPath() error {
+func (hf *Hostfile) IsValidPath() error {
 	info, err := os.Stat(hf.Path)
 	if info.IsDir() {
 		return fmt.Errorf("Error while opening file: given path is directory")
