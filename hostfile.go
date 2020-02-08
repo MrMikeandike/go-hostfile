@@ -8,16 +8,16 @@ import (
 )
 
 const (
-	// DEFAULT_HOSTFILE_LOCATION is the default hostfile location
+	// DefaultHostfilePath is the default hostfile location
 	// in most versions of windows
-	DEFAULT_HOSTFILE_LOCATION = "C:\\Windows\\System32\\drivers\\etc\\hosts"
+	DefaultHostfilePath = "C:\\Windows\\System32\\drivers\\etc\\hosts"
 )
 
 // OpenHostfile is a convenient way of creating a new Hostfile struct
 func OpenHostfile(filepath ...string) (Hostfile, error) {
 	var fp string
 	if len(filepath) == 0 {
-		fp = DEFAULT_HOSTFILE_LOCATION
+		fp = DefaultHostfilePath
 	} else if len(filepath) == 1 {
 		fp = filepath[0]
 	} else {
