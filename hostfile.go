@@ -53,23 +53,70 @@ func list(hf string) []Entry {
 }
 
 // Get retrieves all items where the IP AND Hostname matches
-func (hf *Hostfile) Get() []Entry {
-	// TODO
-	return nil
+func (hf *Hostfile) Get(ip string, hostname string) ([]Entry, error) {
+	hfString, err := getfileString(hf.Path)
+	if err != nil {
+		return nil, err
+	}
+	return get(hfString, ip, hostname), nil
+
+}
+
+func get(hf string, ip string, hn string) []Entry {
+	entries := list(hf)
+	var got []Entry
+	for _, e := range entries {
+		if strings.ToUpper(e.Hostname) == strings.ToUpper(hn) &&
+			strings.ToUpper(e.IPAddress) == strings.ToUpper(ip) {
+			got = append(got, e)
+		}
+	}
+
+	return got
 }
 
 // GetByIP retrieves all items where the IP matches the given parameter
 // Impliments List method of Hostfile
-func (hf *Hostfile) GetByIP() []Entry {
-	// TODO
-	return nil
+func (hf *Hostfile) GetByIP(ip string) ([]Entry, error) {
+	hfString, err := getfileString(hf.Path)
+	if err != nil {
+		return nil, err
+	}
+	return getByIP(hfString, ip), nil
+}
+
+func getByIP(hf string, ip string) []Entry {
+	entries := list(hf)
+	var got []Entry
+	for _, e := range entries {
+		if strings.ToUpper(e.IPAddress) == strings.ToUpper(ip) {
+			got = append(got, e)
+		}
+	}
+
+	return got
 }
 
 // GetByHostname retrieves all items where the Hostname matches the given parameter
 // Impliments List method of Hostfile
-func (hf *Hostfile) GetByHostname() []Entry {
-	// TODO
-	return nil
+func (hf *Hostfile) GetByHostname(hostname string) ([]Entry, error) {
+	hfString, err := getfileString(hf.Path)
+	if err != nil {
+		return nil, err
+	}
+	return getByHostname(hfString, hostname), nil
+}
+
+func getByHostname(hf string, hn string) []Entry {
+	entries := list(hf)
+	var got []Entry
+	for _, e := range entries {
+		if strings.ToUpper(e.Hostname) == strings.ToUpper(hn) {
+			got = append(got, e)
+		}
+	}
+
+	return got
 }
 
 // Add adds a single entry to a hostfile

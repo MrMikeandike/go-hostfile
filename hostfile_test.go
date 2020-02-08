@@ -92,3 +92,55 @@ func TestList(t *testing.T) {
 	t.Logf("Logging entries on test machine:\n%s", hfDisplay(t, entries))
 
 }
+
+func TestGet(t *testing.T) {
+	hf, expected := fakeHostfileString(t)
+	var got []Entry
+	for _, exp := range expected {
+
+		got = get(hf, exp.IPAddress, exp.Hostname)
+		if len(got) < 1 {
+			t.Errorf("expected at least one entry for ip='%s', host='%s'. got 0", exp.Hostname, exp.IPAddress)
+			t.Fail()
+		} else {
+			for _, v := range got {
+				if strings.ToUpper(exp.Hostname) != strings.ToUpper(v.Hostname) ||
+					strings.ToUpper(exp.IPAddress) != strings.ToUpper(v.IPAddress) {
+					t.Errorf("expected: ip='%s',host='%s'. got: ip='%s', host='%s'",
+						exp.IPAddress, exp.Hostname, v.IPAddress, v.Hostname)
+					t.Fail()
+				}
+			}
+		}
+
+		got = getByIP(hf, exp.IPAddress)
+		if len(got) < 1 {
+
+			t.Errorf("expected at least one entry for ip='%s'. got 0", exp.IPAddress)
+			t.Fail()
+		} else {
+			for _, v := range got {
+				if strings.ToUpper(exp.IPAddress) != strings.ToUpper(v.IPAddress) {
+					t.Errorf("expected: ip='%s'. got: ip='%s'",
+						exp.IPAddress, v.IPAddress)
+					t.Fail()
+				}
+			}
+		}
+
+		got = getByHostname(hf, exp.Hostname)
+		if len(got) < 1 {
+
+			t.Errorf("expected at least one entry for ip='%s'. got 0", exp.IPAddress)
+			t.Fail()
+		} else {
+			for _, v := range got {
+				if strings.ToUpper(exp.Hostname) != strings.ToUpper(v.Hostname) {
+					t.Errorf("expected: host='%s'. got: host='%s'",
+						exp.Hostname, v.Hostname)
+					t.Fail()
+				}
+			}
+		}
+	}
+}
