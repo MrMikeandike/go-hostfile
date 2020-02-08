@@ -40,22 +40,82 @@ type Entry struct {
 }
 
 // List returns all existing hostfile entries
-func (h *Hostfile) List() {
-
+func (hf *Hostfile) List() ([]Entry, error) {
+	hfString, err := getfileString(hf.Path)
+	if err != nil {
+		return nil, err
+	}
+	return unmarshalHostfile(hfString), nil
 }
 
-// Get retrieves a single item of a hostfile
-func (h *Hostfile) Get() {
+// Get retrieves all items where the IP AND Hostname matches
+func (hf *Hostfile) Get() []Entry {
+	// TODO
+	return nil
+}
 
+// GetByIP retrieves all items where the IP matches the given parameter
+// Impliments List method of Hostfile
+func (hf *Hostfile) GetByIP() []Entry {
+	// TODO
+	return nil
+}
+
+// GetByHostname retrieves all items where the Hostname matches the given parameter
+// Impliments List method of Hostfile
+func (hf *Hostfile) GetByHostname() []Entry {
+	// TODO
+	return nil
 }
 
 // Add adds a single entry to a hostfile
-func (h *Hostfile) Add() {
-
+// Impliments List method of Hostfile
+func (hf *Hostfile) Add(entry Entry) error {
+	// TODO
+	/*
+		Things to think about
+			- Should it error when item exist?
+			- should it return the index of the item?
+			- What happens if the ip OR host already exist?
+			  - should it error?
+			  - should it allow you to specify before it after existing items?
+			  - should it just do nothing?
+			  - should all of the above have parameters that let you choose?
+	*/
+	return nil
 }
 
-// Remove removes a single entry from a hostfile
-func (h *Hostfile) Remove() {
+// Remove removes a single entry from a hostfile where IP AND Hostname matches given parameters
+// Impliments List method of Hostfile
+func (hf *Hostfile) Remove(entry Entry) error {
+	return nil
+}
+
+// RemoveByIP removes a single entry from a hostfile where IP matches given parameter
+// Impliments List and Remove methods of Hostfile
+func (hf *Hostfile) RemoveByIP(entry Entry) error {
+	return nil
+}
+
+// RemoveByHostname removes a single entry from a hostfile where Hostname matches given parameter
+// Impliments List and Remove methods of Hostfile
+func (hf *Hostfile) RemoveByHostname(entry Entry) error {
+	return nil
+}
+
+// TestPath tests the hostfile for common issues, such as file not existing,
+// and file being a directory
+func (hf *Hostfile) TestPath() error {
+	info, err := os.Stat(hf.Path)
+	if info.IsDir() {
+		return fmt.Errorf("Error while opening file: given path is directory")
+	} else if err == nil {
+		return nil
+	} else if os.IsNotExist(err) {
+		return fmt.Errorf("Error while opening file: File doesn't exist")
+	} else {
+		return fmt.Errorf("Error while opening file: Unknown error:\n%v", err)
+	}
 
 }
 
@@ -87,21 +147,5 @@ func unmarshalHostfile(hfString string) []Entry {
 		}
 	}
 	return entries
-
-}
-
-// TestPath tests the hostfile for common issues, such as file not existing,
-// and file being a directory
-func (h *Hostfile) TestPath() error {
-	info, err := os.Stat(h.Path)
-	if !info.IsDir() {
-		return fmt.Errorf("Error while opening file: given path is directory")
-	} else if err != nil {
-		return nil
-	} else if os.IsNotExist(err) {
-		return fmt.Errorf("Error while opening file: File doesn't exist")
-	} else {
-		return fmt.Errorf("Error while opening file: Unknown error:\n%v", err)
-	}
 
 }
