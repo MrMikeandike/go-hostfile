@@ -74,3 +74,21 @@ func fakeHostfileString(t *testing.T) (example string, expected []Entry) {
 			Entry{IPAddress: "127.0.0.2", Hostname: "localhost2"},
 		}
 }
+
+func TestList(t *testing.T) {
+	if strings.ToUpper(os.Getenv("COMPUTERNAME")) != "W10-MIKEANDIKE" {
+		t.Skip("Skipping due to being on unknown computer where hostfile may not exist")
+	}
+	hf, err := Open(DefaultHostfilePath)
+	if err != nil {
+		t.Log(err)
+		t.SkipNow()
+	}
+	entries, err := hf.List()
+	if err != nil {
+		t.Log(err)
+		t.SkipNow()
+	}
+	t.Logf("Logging entries on test machine:\n%s", hfDisplay(t, entries))
+
+}
