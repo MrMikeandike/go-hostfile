@@ -13,8 +13,8 @@ const (
 	DefaultHostfilePath = "C:\\Windows\\System32\\drivers\\etc\\hosts"
 )
 
-// OpenHostfile is a convenient way of creating a new Hostfile struct
-func OpenHostfile(filepath ...string) (Hostfile, error) {
+// Open is a convenient way of creating a new Hostfile struct
+func Open(filepath ...string) (Hostfile, error) {
 	var fp string
 	if len(filepath) == 0 {
 		fp = DefaultHostfilePath
