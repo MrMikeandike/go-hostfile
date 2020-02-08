@@ -45,6 +45,10 @@ func (hf *Hostfile) List() ([]Entry, error) {
 	if err != nil {
 		return nil, err
 	}
+	return list(hfString)
+}
+
+func list(hfString string) ([]Entry, error) {
 	return unmarshalHostfile(hfString), nil
 }
 
