@@ -196,3 +196,27 @@ func TestRemove(t *testing.T) {
 	}
 
 }
+
+func TestAdd(t *testing.T) {
+	testfile := getTestfilePath(t)
+	_, entries := fakeHostfileString(t)
+	err := setEntries(testfile, entries)
+	if err != nil {
+		t.Skip(err)
+	}
+	hf, err := Open(testfile)
+	if err != nil {
+		t.Skip()
+	}
+	err = hf.Add(Entry{Hostname: "testentry", IPAddress: "127.0.0.100"})
+	if err != nil {
+		t.Fatal(err)
+	}
+	current, err := hf.List()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(current) != len(entries)+1 {
+		t.Fatalf("unexpected number of entries after adding.\nExpected %d, got %d", len(entries)+1, len(entries))
+	}
+}

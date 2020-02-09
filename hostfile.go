@@ -122,7 +122,8 @@ func getByHostname(hf string, hn string) []Entry {
 // Add adds a single entry to a hostfile
 // Impliments List method of Hostfile
 func (hf *Hostfile) Add(entry Entry) error {
-	// TODO
+	// TODO: Verify entry
+	// TODO: think about things below
 	/*
 		Things to think about
 			- Should it error when item exist?
@@ -133,7 +134,15 @@ func (hf *Hostfile) Add(entry Entry) error {
 			  - should it just do nothing?
 			  - should all of the above have parameters that let you choose?
 	*/
-	return nil
+	// Not appending file directly in case we want to impliment checks for
+	// existing entries
+
+	entries, err := hf.List()
+	if err != nil {
+		return err
+	}
+	entries = append(entries, entry)
+	return setEntries(hf.Path, entries)
 }
 
 // Remove removes a single entry from a hostfile where IP AND Hostname matches given parameters
