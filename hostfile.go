@@ -182,7 +182,7 @@ func getfileString(fp string) (string, error) {
 }
 func unmarshalHostfile(hfString string) []Entry {
 	var entries []Entry
-	for _, line := range strings.FieldsFunc(hfString, func(r rune) bool { return r == '\n' }) {
+	for _, line := range strings.FieldsFunc(hfString, func(r rune) bool { return r == '\n' || r == '\r' }) {
 		line = strings.Trim(strings.ReplaceAll(line, "\t", " "), " ")
 		if comment := strings.Index(line, "#"); comment != -1 {
 			line = strings.Trim(line[0:comment], "\t ")
