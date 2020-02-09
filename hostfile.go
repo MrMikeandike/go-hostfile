@@ -138,20 +138,87 @@ func (hf *Hostfile) Add(entry Entry) error {
 
 // Remove removes a single entry from a hostfile where IP AND Hostname matches given parameters
 // Impliments List method of Hostfile
-func (hf *Hostfile) Remove(entry Entry) error {
-	return nil
+func (hf *Hostfile) Remove(ip string, hostname string) (int, error) {
+	hfString, err := getfileString(hf.Path)
+	if err != nil {
+		return -1, err
+	}
+	keep, removed := remove(hfString, ip, hostname)
+	err = setEntries(hf.Path, keep)
+	if err != nil {
+		return -1, err
+	}
+	return removed, nil
+}
+func remove(hf string, ip string, hn string) ([]Entry, int) {
+	entries := list(hf)
+	var keep []Entry
+	var removed int
+	for _, e := range entries {
+		if strings.ToUpper(e.IPAddress) != strings.ToUpper(ip) ||
+			strings.ToUpper(e.Hostname) != strings.ToUpper(hn) {
+			keep = append(keep, e)
+		} else {
+			removed++
+		}
+	}
+	return keep, removed
 }
 
 // RemoveByIP removes a single entry from a hostfile where IP matches given parameter
 // Impliments List and Remove methods of Hostfile
-func (hf *Hostfile) RemoveByIP(entry Entry) error {
-	return nil
+func (hf *Hostfile) RemoveByIP(ip string) (int, error) {
+	hfString, err := getfileString(hf.Path)
+	if err != nil {
+		return -1, err
+	}
+	keep, removed := removeByIP(hfString, ip)
+	err = setEntries(hf.Path, keep)
+	if err != nil {
+		return -1, err
+	}
+	return removed, nil
+}
+func removeByIP(hf string, ip string) ([]Entry, int) {
+	entries := list(hf)
+	var keep []Entry
+	var removed int
+	for _, e := range entries {
+		if strings.ToUpper(e.IPAddress) != strings.ToUpper(ip) {
+			keep = append(keep, e)
+		} else {
+			removed++
+		}
+	}
+	return keep, removed
 }
 
 // RemoveByHostname removes a single entry from a hostfile where Hostname matches given parameter
 // Impliments List and Remove methods of Hostfile
-func (hf *Hostfile) RemoveByHostname(entry Entry) error {
-	return nil
+func (hf *Hostfile) RemoveByHostname(hostname string) (int, error) {
+	hfString, err := getfileString(hf.Path)
+	if err != nil {
+		return -1, err
+	}
+	keep, removed := removeByHostname(hfString, hostname)
+	err = setEntries(hf.Path, keep)
+	if err != nil {
+		return -1, err
+	}
+	return removed, nil
+}
+func removeByHostname(hf string, hn string) ([]Entry, int) {
+	entries := list(hf)
+	var keep []Entry
+	var removed int
+	for _, e := range entries {
+		if strings.ToUpper(e.Hostname) != strings.ToUpper(hn) {
+			keep = append(keep, e)
+		} else {
+			removed++
+		}
+	}
+	return keep, removed
 }
 
 // IsValidPath tests the hostfile for common issues, such as file not existing,

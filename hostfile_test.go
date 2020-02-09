@@ -168,3 +168,31 @@ func TestSetEntries(t *testing.T) {
 	}
 
 }
+
+func TestRemove(t *testing.T) {
+	testfile := getTestfilePath(t)
+	_, entries := fakeHostfileString(t)
+	err := setEntries(testfile, entries)
+	if err != nil {
+		t.Skip(err)
+	}
+	hf, err := Open(testfile)
+
+	rmd, err := hf.Remove(entries[1].IPAddress, entries[1].Hostname)
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Logf("items removed during test: %d", rmd)
+	if rmd != 1 {
+		t.Fatalf("unexpected number of removed entries. expected: %d, got: %d",
+			1, rmd)
+	}
+	current, err := hf.List()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if entries[2] != current[1] {
+		t.Fatalf("expected next item in row \n%+v\nbut got\n%+v\n", entries[2], current[1])
+	}
+
+}
