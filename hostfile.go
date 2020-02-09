@@ -200,3 +200,15 @@ func unmarshalHostfile(hfString string) []Entry {
 	return entries
 
 }
+
+func setEntries(fp string, entries []Entry) error {
+	var lines = []string{
+		"# Entry format is 'IPADDRESS HOSTNAME'. lines starting with '#' are comment lines and ignored",
+	}
+	for _, e := range entries {
+		lines = append(lines, fmt.Sprintf("%s   %s", e.IPAddress, e.Hostname))
+	}
+	lines = append(lines, "")
+
+	return ioutil.WriteFile(fp, []byte(strings.Join(lines, "\r\n")), 0644)
+}

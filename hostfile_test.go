@@ -7,6 +7,11 @@ import (
 	"testing"
 )
 
+func getTestfilePath(t *testing.T) string {
+	t.Helper()
+	return os.TempDir() + string(os.PathSeparator) + "hosts"
+}
+
 func TestUnmarshalHostfile(t *testing.T) {
 	testfile, expected := fakeHostfileString(t)
 	hf := unmarshalHostfile(testfile)
@@ -143,4 +148,23 @@ func TestGet(t *testing.T) {
 			}
 		}
 	}
+}
+
+func TestSetEntries(t *testing.T) {
+	testfile := getTestfilePath(t)
+	_, entries := fakeHostfileString(t)
+	err := setEntries(testfile, entries)
+	if err != nil {
+		t.Fatal(err)
+	}
+	hf, err := Open(testfile)
+	if err != nil {
+		t.Fatal(err)
+	}
+	writtenEntries, err := hf.List()
+	if len(entries) != len(writtenEntries) {
+
+		t.Fatal(err)
+	}
+
 }
