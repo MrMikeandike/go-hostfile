@@ -7,7 +7,7 @@ compile:
   stage: build
   script:
     - cd $CI_PROJECT_DIR
-    - GOOS=windows GOARCH=AMD64 go build ${CI_PROJECT_DIR}/cmd/hostfile -o ${CI_PROJECT_DIR}/build/hostfile64.exe
+    - GOOS=windows GOARCH=amd64 go build ${CI_PROJECT_DIR}/cmd/hostfile -o ${CI_PROJECT_DIR}/build/hostfile64.exe
   artifacts:
     paths:
       - ${CI_PROJECT_DIR}/build/hostfile64.exe
