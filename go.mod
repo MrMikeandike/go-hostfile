@@ -1,4 +1,4 @@
-module gitlab.com/mrmikeandike/go-hostfile
+module github.com/mrmikeandike/go-hostfile
 
 go 1.13
 
