@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"gitlab.com/mrmikeandike/go-hostfile"
+	"github.com/mrmikeandike/go-hostfile"
 
 	"gopkg.in/alecthomas/kingpin.v2"
 )
