@@ -34,7 +34,7 @@ jobs:
         fi
 
     - name: Build linux amd64
-      run: go build -v ./cmd/hostfile -o ./build/hostfile-windows-amd64.exe
+      run: go build -v -o ./build/hostfile-windows-amd64.exe ./cmd/hostfile 
       env:
         GOOS: windows
         GOARCH: amd64
